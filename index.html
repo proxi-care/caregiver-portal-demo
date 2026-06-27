@@ -222,7 +222,7 @@ const REACTIONS=[["When she needs reassurance","Affirm warmly, slow down, stay c
 
 const CONSENT=[
   {k:"A",t:"Record calls",sub:"So you can listen back",on:true,cons:"Turning this off stops recording and pauses saved transcripts."},
-  {k:"E",t:"Let the twin listen to your calls",sub:"To learn Mom's voice & stories",on:true,cons:"Turning this off stops forwarding — the twin can't learn from real calls."},
+  {k:"E",t:"Let the twin listen to Mom's calls",sub:"To learn Mom's voice & stories",on:true,cons:"Turning this off stops forwarding — the twin can't learn from real calls."},
   {k:"F",t:"Use your voice for interviews",sub:"Powers “fill a gap”",on:true,cons:"Turning this off ends voice interviews; past interview audio is erased."},
   {k:"clone",t:"Keep the cloned voice",sub:"How the twin sounds like you",on:true,cons:"Turning this off erases the voice clone — the twin can no longer speak."}];
 
@@ -443,7 +443,7 @@ SCREENS.readiness={title:"Is the twin ready?",render(){const done=READY.filter(r
     ${READY.map(([t,s,ok])=>`<div class="card" style="display:flex;gap:.8rem;align-items:center;border-color:${ok?'#cfe3cf':'var(--line)'}">
       <span style="width:30px;height:30px;border-radius:50%;background:${ok?'var(--calm-soft)':'var(--sunk)'};display:grid;place-items:center;color:var(--calm)">${ok?'✓':'•'}</span>
       <span><b>${t}</b><br><span class="muted small">${s}</span></span></div>`).join("")}
-    <p class="reassure">Set up once. Forwarding is the only step that needs your phone — we walk you through it.</p>`;}};
+    <p class="reassure">Set up once. The only hands-on step is on <b>Mom's</b> phone — we walk you through it.</p>`;}};
 
 SCREENS.forwarding={title:"Phone forwarding",render(){return `
   <div class="card" style="background:var(--calm-soft);border:none"><span class="pill calm">✓ Working</span>
