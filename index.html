@@ -222,7 +222,7 @@ const REACTIONS=[["When she needs reassurance","Affirm warmly, slow down, stay c
 
 const CONSENT=[
   {k:"A",t:"Record calls",sub:"So you can listen back",on:true,cons:"Turning this off stops recording and pauses saved transcripts."},
-  {k:"E",t:"Let the twin listen to Mom's calls",sub:"To learn Mom's voice & stories",on:true,cons:"Turning this off stops forwarding — the twin can't learn from real calls."},
+  {k:"E",t:"Let the twin listen to your calls with Mom",sub:"To learn your voice & Mom's stories",on:true,cons:"Turning this off stops forwarding — the twin can't learn from real calls."},
   {k:"F",t:"Use your voice for interviews",sub:"Powers “fill a gap”",on:true,cons:"Turning this off ends voice interviews; past interview audio is erased."},
   {k:"clone",t:"Keep the cloned voice",sub:"How the twin sounds like you",on:true,cons:"Turning this off erases the voice clone — the twin can no longer speak."}];
 
@@ -443,20 +443,21 @@ SCREENS.readiness={title:"Is the twin ready?",render(){const done=READY.filter(r
     ${READY.map(([t,s,ok])=>`<div class="card" style="display:flex;gap:.8rem;align-items:center;border-color:${ok?'#cfe3cf':'var(--line)'}">
       <span style="width:30px;height:30px;border-radius:50%;background:${ok?'var(--calm-soft)':'var(--sunk)'};display:grid;place-items:center;color:var(--calm)">${ok?'✓':'•'}</span>
       <span><b>${t}</b><br><span class="muted small">${s}</span></span></div>`).join("")}
-    <p class="reassure">Set up once. The only hands-on step is on <b>Mom's</b> phone — we walk you through it.</p>`;}};
+    <p class="reassure">Set up once, on <b>your</b> phone — we walk you through it. Nothing changes on Mom's phone.</p>`;}};
 
 SCREENS.forwarding={title:"Phone forwarding",render(){return `
   <div class="card" style="background:var(--calm-soft);border:none"><span class="pill calm">✓ Working</span>
-    <p style="margin:.5rem 0 0">Mom's calls reach the twin, and it can hand the call to you anytime.</p></div>
-  <div class="section-label">How it's set up</div>
-  <div class="card"><label class="lbl">Mom's phone company</label>
+    <p style="margin:.5rem 0 0">When you can't pick up, Mom's calls reach the twin — and it can hand the call back to you anytime.</p></div>
+  <div class="section-label">How it's set up — on your phone</div>
+  <div class="card"><label class="lbl">Your phone company</label>
     <select class="field"><option>Verizon</option><option>AT&T</option><option>T-Mobile</option></select>
-    <label class="lbl">Turn it on (tap to dial on Mom's phone)</label>
-    <button class="btn ghost" onclick="say('Opening the dialer with *72…')">📞 Dial *72 1 218 630 8231</button>
+    <label class="lbl">Turn it on — on <b>your</b> phone</label>
+    <p class="muted small" style="margin:.3rem 0 .5rem">This forwards your calls to the twin when you can't answer. Tap to dial it now:</p>
+    <button class="btn ghost" onclick="say('Opening your dialer with *72…')">📞 Dial *72 1 218 630 8231</button>
     <button class="btn primary" style="margin-top:.6rem" onclick="say('Calling to check it works…')">Test it now</button></div>
-  <div class="btnrow"><button class="btn ghost" onclick="say('Paused — Mom’s calls ring her normally')">Pause forwarding</button>
+  <div class="btnrow"><button class="btn ghost" onclick="say('Paused — Mom’s calls ring you normally')">Pause forwarding</button>
     <button class="btn ghost" onclick="say('We’ll call you to help')">Call me for help</button></div>
-  <p class="reassure">In a two-party-consent state? You can use <b>“Fill a gap”</b> instead of forwarding.</p>`;}};
+  <p class="reassure"><b>Nothing changes on Mom's phone</b> — she calls you exactly as always. In a two-party-consent state? You can use <b>“Fill a gap”</b> instead.</p>`;}};
 
 SCREENS.consent={title:"What you've allowed",render(){return `<p class="intro">You're in control. Change any piece — we tell you exactly what happens.</p>
   ${CONSENT.map((c,i)=>`<div class="card"><div class="toggle"><span><b>${c.t}</b><br><span class="muted small">${c.sub}</span></span>
@@ -548,7 +549,7 @@ SCREENS.wizard={title:"Set up the twin",render(o){
   const bodies={
     1:`<div class="card" style="text-align:center"><div style="font-size:2.6rem">🌿</div>
         <h3 style="font-family:var(--serif)">Let's set up Mom's twin</h3>
-        <p class="muted">About 5 minutes. Most of it is already filled in from her intake — the one hands-on step is turning on call forwarding from Mom's phone.</p></div>
+        <p class="muted">About 5 minutes. Most of it is already filled in from her intake — the one hands-on step is turning on call forwarding on your phone.</p></div>
        ${go2(2,"Let's begin")}
        <p class="reassure">You can stop anytime and pick up where you left off (we save it for 14 days).</p>`,
     2:`<div class="eyebrow">Step 2 · About Mom</div><p class="intro">We pre-filled this from her intake — just check it's right.</p>
@@ -557,9 +558,10 @@ SCREENS.wizard={title:"Set up the twin",render(o){
          <label class="lbl">State (sets the privacy rules)</label><input class="field" value="New York"></div>
        ${go2(3,"Looks right — continue")}`,
     3:`<div class="eyebrow">Step 3 · Forwarding (the one hands-on step)</div>
-       <p class="intro">This sends Mom's calls to the twin. Do it on <b>Mom's</b> phone — we'll guide you.</p>
-       <div class="card"><label class="lbl">Her phone company</label><select class="field"><option>Verizon</option><option>AT&T</option></select>
-         <button class="btn ghost" onclick="say('Opening the dialer…')">📞 Tap to dial *72 …8231</button>
+       <p class="intro">This forwards <b>your</b> calls to the twin when you can't pick up. Do it on your phone — Mom's phone never changes.</p>
+       <div class="card"><label class="lbl">Your phone company</label><select class="field"><option>Verizon</option><option>AT&T</option></select>
+         <p class="muted small" style="margin:.3rem 0 .5rem">Tap to dial it on your phone:</p>
+         <button class="btn ghost" onclick="say('Opening your dialer…')">📞 Dial *72 1 218 630 8231</button>
          <button class="btn primary" style="margin-top:.6rem" onclick="say('Calling to check… it works! ✓')">Test it</button></div>
        <p class="muted small">Can't do it now? <a href="#" onclick="say('We’ll text you the steps + a help callback');return false" style="color:var(--accent-ink)">Send me the steps</a>. In a two-party-consent state, use an interview instead.</p>
        ${go2(4,"Forwarding's on — continue")}`,
