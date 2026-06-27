@@ -140,6 +140,10 @@
       <button onclick="go('voice')">Voice &amp; corpus (POR.9)</button>
       <button onclick="go('talks')">How the twin talks (POR.10)</button>
       <button onclick="go('handles')">How it handles things (POR.12)</button>
+      <h4>Flows</h4>
+      <button onclick="go('wizard',{step:1})">First-run wizard (POR.1)</button>
+      <button onclick="go('livecall')">Live call in progress (copilot)</button>
+      <button onclick="go('principles')">UX principles (the tag)</button>
       <h4>Setup &amp; account</h4>
       <button onclick="go('readiness')">Go-live readiness (POR.1/9)</button>
       <button onclick="go('forwarding')">Forwarding (POR.2)</button>
@@ -231,9 +235,9 @@ function go(n,o={}){document.getElementById('demoPanel').classList.remove('open'
 function back(){stack.pop();render();}
 function root(n){stack=[{n,o:{}}];render();}
 const SCREENS={};
-const HUB={home:'home',calls:'calls',activity:'calls',call:'calls',recordings:'calls',escal:'calls',moment:'calls',moment2:'calls',live:'calls',
+const HUB={home:'home',calls:'calls',activity:'calls',call:'calls',recordings:'calls',escal:'calls',moment:'calls',moment2:'calls',live:'calls',livecall:'calls',
   memory:'memory',approve:'memory',membook:'memory',memlist:'memory',gap:'memory',voice:'memory',talks:'memory',section:'memory',handles:'memory',sandbox:'memory',
-  settings:'settings',forwarding:'settings',consent:'settings',alerts:'settings',promises:'settings',routines:'settings',readiness:'settings',switch:'settings',account:'settings',leave:'settings'};
+  settings:'settings',forwarding:'settings',consent:'settings',alerts:'settings',promises:'settings',routines:'settings',readiness:'settings',switch:'settings',account:'settings',leave:'settings',wizard:'settings',principles:'settings'};
 
 function render(){
   const cur=stack[stack.length-1]||{n:"home",o:{}};const s=SCREENS[cur.n];
@@ -264,7 +268,8 @@ SCREENS.home={title:"Home",render(){
     row("📞","Call Mom now","Rings you first, then Mom — the twin never self-dials","go('live')"),
     row("🌱",`${APPROVALS.length} things to approve`,"New things the twin learned about Mom","go('approve')"),
     row("🎙️","Fill a gap together","Tell the twin more about Mom — just talk","go('gap')")];
-  return verdict+`<div style="margin-top:.4rem">${rows.join("")}</div>`+
+  const tag=`<div style="text-align:center;margin:.1rem 0 .7rem"><button class="chip" onclick="go('principles')" style="font-size:.82rem">ⓘ Designed for caregivers — why it's this simple</button></div>`;
+  return tag+verdict+`<div style="margin-top:.4rem">${rows.join("")}</div>`+
     `<p class="reassure">The twin is always growing — never “done.” You're doing enough. 💛</p>`;
 }};
 
@@ -279,8 +284,8 @@ SCREENS.live={title:"Call Mom",render(){return `
   <div class="card"><span class="pill soft">Standby</span>
     <h3 style="font-family:var(--serif);margin:.5rem 0">The twin is ready</h3>
     <p class="muted">When you call, it rings <b>you</b> first, then Mom — you're always on the line. Mom never gets an unexpected call.</p>
-    <button class="btn primary" style="margin-top:.4rem" onclick="say('Calling you, then Mom…')">📞 Start the call</button>
-    <button class="btn ghost" style="margin-top:.6rem" onclick="say('You’ll be able to listen, nudge, or take over')">Just listen in</button></div>
+    <button class="btn primary" style="margin-top:.4rem" onclick="say('Calling you, then Mom…');go('livecall')">📞 Start the call</button>
+    <button class="btn ghost" style="margin-top:.6rem" onclick="go('livecall')">Just listen in</button></div>
   <div class="section-label">When you're on a live call you can</div>
   ${row("👂","Listen","Hear it live, do nothing else","say('On a real call this is live')")}
   ${row("💬","Send a gentle nudge","“Remind her about Sunday” — the twin works it in","say('Nudge sent to the twin')")}
@@ -418,6 +423,8 @@ SCREENS.settings={title:"Settings",render(){return hub("Setup, what you've allow
   row("📅","Routines","Mom's daily rhythm","go('routines')"),
   row("👥","Switch patient","You look after more than one","go('switch')"),
   row("🙋","Your details","Name & phone","go('account')"),
+  row("🧭","Set up the twin","First-run guide (re-run anytime)","go('wizard',{step:1})"),
+  row("ⓘ","Why it's built this way","The caregiver UX principles","go('principles')"),
   row("🚪","Leave the program","Stop and delete everything","go('leave')")]);}};
 
 SCREENS.readiness={title:"Is the twin ready?",render(){const done=READY.filter(r=>r[2]).length;
@@ -482,6 +489,98 @@ SCREENS.leave={title:"Leave the program",render(){return `<p class="intro">We'll
   <div class="card"><b>3 · What the law keeps</b><br><span class="muted">A small audit record (required for 6 years) and any 911 records. We tell you exactly what and why.</span></div>
   <button class="btn danger" onclick="say('A coordinator will call to confirm — nothing is deleted yet')">Start leaving</button>
   <p class="reassure">You can pause or change your mind at any step. 💛</p>`;}};
+
+// ══ LIVE CALL IN PROGRESS (copilot — listen · nudge · take over) ══
+SCREENS.livecall={title:"On a call with Mom",render(o){
+  const mode=o.mode||"listen";
+  const transcript=`
+    <div class="bubble twin"><div class="who">THE TWIN</div>Morning, Mom. Did you sleep alright?</div>
+    <div class="bubble mom"><div class="who">MOM</div>Oh… is that you? The garden looks lovely today.</div>
+    <div class="bubble twin"><div class="who">THE TWIN</div>It does. The roses are coming in. Have you had your coffee yet?</div>
+    <div class="bubble mom"><div class="who">MOM</div>Not yet. Where did I put my cup…</div>`;
+  const present=`<div class="card" style="background:var(--calm-soft);border:none;display:flex;align-items:center;gap:.6rem">
+     <span class="dot" style="background:var(--calm);width:.7rem;height:.7rem;animation:pulse 1.5s infinite"></span>
+     <span><b>You're on the call</b> · 02:14<br><span class="muted small">${mode==='takeover'?'Mom is hearing YOUR voice now':'Listening — the twin is speaking'}</span></span></div>`;
+  if(mode==="takeover") return present+transcript+
+    `<div class="card" style="background:var(--alert-soft);border:none;text-align:center"><b>You're speaking to Mom</b><br>
+       <span class="muted small">She hears your real voice. The twin is paused.</span></div>
+     <button class="btn primary" onclick="say('Handed back — the twin picks up with full context');go('livecall',{mode:'listen'})">↩ Hand back to the twin</button>`;
+  return present+transcript+
+    `<div class="section-label">You can step in — gently</div>
+     <div class="card"><label class="lbl">Send the twin a quiet nudge</label>
+       <input class="field" placeholder="e.g. Remind her Sarah visits Sunday">
+       <button class="btn ghost" onclick="say('Nudge sent — the twin will work it in within a turn')">💬 Send nudge (only the twin hears)</button></div>
+     <button class="btn primary" onclick="confirmTakeover()">🗣️ Speak to Mom in your voice</button>
+     <div class="btnrow"><button class="btn ghost" onclick="say('Twin paused — auto-resumes in 30s')">⏸ Pause the twin</button>
+       <button class="btn ghost" onclick="flagMoment()">⚑ Flag this</button></div>
+     <button class="btn danger" style="margin-top:.6rem" onclick="endCall()">End the call</button>
+     <p class="reassure">A real person is on every call. The twin never speaks to Mom alone. 🤝</p>`;
+}};
+function confirmTakeover(){const s=document.createElement('div');s.className='sheet';s.id='sheet';
+  s.innerHTML=`<div class="inner" style="text-align:center"><h3 style="font-family:var(--serif)">Mom will hear your voice</h3>
+    <p class="muted">The twin pauses and Mom hears <b>you</b>. We'll give a soft 3-second heads-up first.</p>
+    <button class="btn primary" onclick="closeSheet();say('3… 2… 1 — you're live with Mom');go('livecall',{mode:'takeover'})">Yes, let me speak</button>
+    <button class="btn ghost" style="margin-top:.6rem" onclick="closeSheet()">Not now</button></div>`;
+  document.querySelector('.phone').appendChild(s);}
+function flagMoment(){say('Flagged for you to review later');}
+function endCall(){const s=document.createElement('div');s.className='sheet';s.id='sheet';
+  s.innerHTML=`<div class="inner" style="text-align:center"><h3 style="font-family:var(--serif)">End the call?</h3>
+    <p class="muted">The twin will give Mom a warm goodbye — no abrupt hang-up.</p>
+    <button class="btn danger" onclick="closeSheet();say('The twin said goodbye gently. Call ended.');root('home')">End call</button>
+    <button class="btn ghost" style="margin-top:.6rem" onclick="closeSheet()">Stay on</button></div>`;
+  document.querySelector('.phone').appendChild(s);}
+
+// ══ FIRST-RUN ONBOARDING WIZARD (POR.1) — 5 guided steps ══
+SCREENS.wizard={title:"Set up the twin",render(o){
+  const step=o.step||1,total=5;
+  const bar=`<div class="stepbar">${Array.from({length:total}).map((_,k)=>`<i class="${k<step?'on':''}"></i>`).join("")}</div>`;
+  const go2=(s,l,cls)=>`<button class="btn ${cls||'primary'}" onclick="go('wizard',{step:${s}})">${l}</button>`;
+  const bodies={
+    1:`<div class="card" style="text-align:center"><div style="font-size:2.6rem">🌿</div>
+        <h3 style="font-family:var(--serif)">Let's set up Mom's twin</h3>
+        <p class="muted">About 5 minutes. Most of it is already filled in from her intake — the one hands-on step is turning on call forwarding from Mom's phone.</p></div>
+       ${go2(2,"Let's begin")}
+       <p class="reassure">You can stop anytime and pick up where you left off (we save it for 14 days).</p>`,
+    2:`<div class="eyebrow">Step 2 · About Mom</div><p class="intro">We pre-filled this from her intake — just check it's right.</p>
+       <div class="card"><label class="lbl">What the twin calls her</label><input class="field" value="Mom">
+         <label class="lbl">Her phone</label><input class="field" value="+1 (518) 808-3737">
+         <label class="lbl">State (sets the privacy rules)</label><input class="field" value="New York"></div>
+       ${go2(3,"Looks right — continue")}`,
+    3:`<div class="eyebrow">Step 3 · Forwarding (the one hands-on step)</div>
+       <p class="intro">This sends Mom's calls to the twin. Do it on <b>Mom's</b> phone — we'll guide you.</p>
+       <div class="card"><label class="lbl">Her phone company</label><select class="field"><option>Verizon</option><option>AT&T</option></select>
+         <button class="btn ghost" onclick="say('Opening the dialer…')">📞 Tap to dial *72 …8231</button>
+         <button class="btn primary" style="margin-top:.6rem" onclick="say('Calling to check… it works! ✓')">Test it</button></div>
+       <p class="muted small">Can't do it now? <a href="#" onclick="say('We’ll text you the steps + a help callback');return false" style="color:var(--accent-ink)">Send me the steps</a>. In a two-party-consent state, use an interview instead.</p>
+       ${go2(4,"Forwarding's on — continue")}`,
+    4:`<div class="eyebrow">Step 4 · How the twin learns Mom</div><p class="intro">Pick one — you can change it later.</p>
+       <button class="row" onclick="go('wizard',{step:5})"><span class="lead">👂</span><span><span class="rtitle">Listen along (easiest)</span><br><span class="rsub">It learns from her real calls — nothing for you to do</span></span><span class="chev">›</span></button>
+       <button class="row" onclick="go('wizard',{step:5})"><span class="lead">🎙️</span><span><span class="rtitle">Sit down for interviews</span><br><span class="rsub">Answer questions in your own words — great gap-filler</span></span><span class="chev">›</span></button>`,
+    5:`<div class="hero calm card" style="text-align:center"><div style="font-size:2.4rem">✓</div>
+        <h3 style="font-family:var(--serif)">Almost there</h3><p>Here's what's ready before the twin takes a real call.</p></div>
+       ${READY.map(([t,,ok])=>`<div class="card" style="display:flex;gap:.7rem;align-items:center"><span style="color:var(--calm)">${ok?'✓':'•'}</span><span>${t}</span></div>`).join("")}
+       <button class="btn calm" onclick="say('The twin is live for Mom 🌿');root('home')">Go live</button>`
+  };
+  return bar+bodies[step];
+}};
+
+// ══ UX PRINCIPLES — the in-app explainer (the "tag") ══
+const PRINCIPLES=[
+  ["1","One glance: “is everything okay?”","The home answers the only question a worried caregiver has — in under 2 seconds. A verdict, never two alarming numbers."],
+  ["2","Important now, not everything","The system already did the triage: one thing to look at, not a 221-item queue."],
+  ["3","Plain human language","“Mom seemed unsure whether she'd eaten,” never “DISTRESS intent detected.”"],
+  ["4","Shallow, linear navigation","Home → card → moment → back. Four simple hubs, always a back arrow. No operator console."],
+  ["5","Large targets, high contrast, space","Full-width cards & buttons (54px+), big readable type — built for a thumb and aging eyes."],
+  ["6","Reassuring, not a to-do debt","“Always growing — never done. You're doing enough,” instead of “67% / 221 unreviewed.”"],
+  ["7","Voice is a first-class input","“Answer however you like” — talk, don't fill forms."],
+  ["8","The system carries the memory","Affect-tagged calls, resumable setup — the caregiver never has to reconstruct context."]];
+SCREENS.principles={title:"Why it's built this way",render(){
+  return `<p class="intro">This portal is made for the <b>50/60+ family caregiver</b> — often anxious, mobile, mid-task. Every screen follows these principles.</p>`+
+    PRINCIPLES.map(([n,t,d])=>`<div class="card" style="display:flex;gap:.8rem"><span class="lead" style="background:var(--calm-soft);color:var(--calm-ink,var(--calm));font-family:var(--serif);font-weight:700">${n}</span>
+       <span><b>${t}</b><br><span class="muted small">${d}</span></span></div>`).join("")+
+    `<div class="card" style="background:var(--sunk);border:none"><b>Accessibility, always</b><br><span class="muted small">Real buttons & keyboard, AA contrast, color + words (never color alone), text that respects your phone's size setting, calm motion.</span></div>
+     <div class="card" style="background:var(--look-soft);border:none"><b>Two lenses, one system</b><br><span class="muted small">This is the <b>family</b> view. A separate, denser <b>operator console</b> serves trained monitors doing live steering — same events, different lens.</span></div>`;
+}};
 
 // voice-memo FAB (POR.7) — record → extract → confirm
 function openMemo(){const s=document.createElement('div');s.className='sheet';s.id='sheet';

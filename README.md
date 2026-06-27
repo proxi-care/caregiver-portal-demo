@@ -1,8 +1,16 @@
 # Caregiver Portal — UX demo (Portal B · the family lens)
 
+> **🔒 G1 UX LOCKED — `g1-ux-v1` (2026-06-27).** This is the agreed caregiver-portal UX for
+> G1; build against it. The 8 principles below are the design contract every POR.* page honors.
+> In-app, tap **"ⓘ Designed for caregivers — why"** on Home (or Settings → "Why it's built this
+> way") for the principles explainer.
+
 A self-contained, **mobile-first** clickable demo of the caregiver portal designed for the
 **50/60+ family caregiver** — calm, plain-language, one-thing-at-a-time. It's the *family*
 answer to "is everything okay?", not the operator console.
+
+Includes the full **first-run onboarding wizard** (5 guided steps), the **live-call in-progress**
+console (listen · nudge · speak-in-your-voice · pause · end), and an in-app **UX-principles tag**.
 
 > **Two users, two lenses (don't merge them).** The dense s2 portal we have today is the
 > **monitor console** — for a trained/paid operator doing live-call steering and gate
