@@ -133,6 +133,9 @@
 
   <div class="demo">
     <div class="panel" id="demoPanel">
+      <h4>Menu structure (A/B)</h4>
+      <button onclick="setIA('B')">B · Her calls / The twin ✓ rec.</button>
+      <button onclick="setIA('A')">A · Calls / Memory (original)</button>
       <h4>Demo state</h4>
       <button onclick="setState('attention')">A tough moment happened</button>
       <button onclick="setState('calm')">A calm day (all is well)</button>
@@ -160,6 +163,12 @@
 // ── mock data: system events already translated into how a daughter thinks ──
 const PATIENT={name:"Mom",who:"your mother",age:83,stage:"moderate-stage Alzheimer's",voice:"alex_clean"};
 let STATE="attention";
+let IA="B"; // "A" = Calls / Memory · "B" = Her calls / The twin (recommended)
+const NAV={
+  A:[["home","🏠","Home"],["calls","📞","Calls"],["memory","📖","Memory"],["settings","⚙️","Settings"]],
+  B:[["home","🏠","Home"],["calls","📞","Her calls"],["memory","🌿","The twin"],["settings","⚙️","Settings"]]};
+function hubLabel(id){return Object.fromEntries(NAV[IA].map(x=>[x[0],x[2]]))[id]||id;}
+function setIA(x){IA=x;document.getElementById('demoPanel').classList.remove('open');render();}
 const PERSONAS=[{id:"mom",label:"Mom (your twin “Alex”)",active:true},{id:"rosa",label:"Aunt Rosa"}];
 
 const MOMENT={tone:"alert",kind:"A tough moment this morning",when:"Today, 9:21 AM · from an 11-minute call",
@@ -242,13 +251,14 @@ const HUB={home:'home',calls:'calls',activity:'calls',call:'calls',recordings:'c
 function render(){
   const cur=stack[stack.length-1]||{n:"home",o:{}};const s=SCREENS[cur.n];
   if(cur.n==="home"){stage.innerHTML=`<div><div class="eyebrow">Good morning</div><h2>Looking after ${PATIENT.name}</h2></div><div class="lead" style="margin-left:auto" aria-hidden="true">🌿</div>`;}
-  else{stage.innerHTML=`<button class="back" onclick="back()" aria-label="Go back">‹</button><h2>${s.title}</h2>`;}
+  else{const ttl=['calls','memory','settings'].includes(cur.n)?hubLabel(cur.n):s.title;
+       stage.innerHTML=`<button class="back" onclick="back()" aria-label="Go back">‹</button><h2>${ttl}</h2>`;}
   stg.innerHTML=s.render(cur.o);stg.scrollTop=0;stg.focus();
   document.getElementById('fab').style.display=(HUB[cur.n]==='memory'||cur.n==='home')?'block':'none';
   renderNav(HUB[cur.n]||cur.n);
 }
 function renderNav(active){
-  const items=[["home","🏠","Home"],["calls","📞","Calls"],["memory","📖","Memory"],["settings","⚙️","Settings"]];
+  const items=NAV[IA];
   document.getElementById('nav').innerHTML=items.map(([id,ic,l])=>
     `<button onclick="root('${id}')" ${active===id?'aria-current="page"':''}><span class="ic" aria-hidden="true">${ic}</span><span>${l}</span></button>`).join('');
 }
@@ -331,7 +341,7 @@ function momentScreen(m){return{title:"What happened",render(){
 SCREENS.moment=momentScreen(MOMENT);SCREENS.moment2=momentScreen(MOMENT2);
 
 // ══ MEMORY hub (digest · KB · interview · voice/corpus · talks · handles) ══
-SCREENS.memory={title:"Memory",render(){return hub("What the twin knows and how it speaks — keep it true to Mom.",[
+SCREENS.memory={title:"The twin",render(){return hub(IA==="B"?"Who the twin is — what it knows about Mom and how it behaves. Keep it true to her.":"What the twin knows and how it speaks — keep it true to Mom.",[
   row("🌱",`${APPROVALS.length} for your review`,"New things to approve","go('approve')"),
   row("📖","Memory book","Everything the twin knows","go('membook')"),
   row("🎙️","Fill a gap together","Add more — just talk","go('gap')"),

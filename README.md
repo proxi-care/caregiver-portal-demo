@@ -29,8 +29,13 @@ All data is **mock** (patient "Mom" / twin "Alex"). Tap the **`demo ⚙`** chip 
 flip between **"a tough moment happened"** and **"a calm day"**, or jump to any screen.
 
 ## Navigation (shallow — 4 hubs + back)
-**Home · Calls · Memory · Settings** bottom bar; everything is one or two taps from a hub,
+**Home · Her calls · The twin · Settings** bottom bar; everything is one or two taps from a hub,
 always with a back arrow. No 14-item operator rail.
+
+The hubs are named by the caregiver's mental model, not system nouns: **what the twin *did***
+(Her calls) vs **who the twin *is*** (The twin — both what it knows *and* how it behaves). An
+8-phrase "intent test" picked this over the older *Calls / Memory* split (which mis-filed
+behavior under "Memory"). Flip between the two in the `demo ⚙` panel → **Menu structure (A/B)**.
 
 ## Coverage — every apps/UX task (POR.1–POR.16) in caregiver language
 | Task | System feature | In the demo (caregiver lens) |
