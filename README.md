@@ -20,17 +20,34 @@ open demos/caregiver-portal/index.html      # or double-click it
 All data is **mock** (patient "Mom" / twin "Alex"). Tap the **`demo ⚙`** chip (bottom-right) to
 flip between **"a tough moment happened"** and **"a calm day"**, or jump to any screen.
 
-## What it demonstrates (our main features, in caregiver language)
-| Feature (system) | Here (caregiver lens) |
-|---|---|
-| Home / dashboard | **"Is everything okay?"** verdict — one glance, calm or "one thing to look at" |
-| Escalation / safety | **"A tough moment this morning"** → story + **"Listen to this moment"** (snippet, not the whole call) + one action + "Adjust the twin" |
-| Digest / KB candidates | **"For your review"** — one card at a time, *Add / Skip / Not true*, progress `1 of 3` |
-| Call history | **"Recent calls"** — narrative summaries + affect tags (calm / bright / tough) |
-| Memory book (KB) | plain sections + **"Add a memory — just talk"** |
-| Interview (corpus) | **"Fill a gap together"** — voice-first, one question, no right words needed |
-| Tuning / prompt | folded into **"Adjust the twin"** on the moment that prompted it |
-| Account / consent / forwarding | plain "how calls reach Mom" + "what you've allowed" + gentle exit |
+## Navigation (shallow — 4 hubs + back)
+**Home · Calls · Memory · Settings** bottom bar; everything is one or two taps from a hub,
+always with a back arrow. No 14-item operator rail.
+
+## Coverage — every apps/UX task (POR.1–POR.16) in caregiver language
+| Task | System feature | In the demo (caregiver lens) |
+|---|---|---|
+| **POR.13** | Dashboard | Home **"Is everything okay?"** verdict (calm / one-thing) |
+| **POR.11** | Escalation triage | **"Tough moments"** → story + **"Listen to this moment"** + Mark reviewed / This was fine |
+| **POR.5** | Alerts config | **Alerts** — sensitivity presets, who's told (test buttons), channels + quiet hours, "emergencies always reach everyone" |
+| **POR.6** | History + skim | **Recent calls** → narrative + affect tags → call detail with **chapters / jump-to / speed** + drop+callback shown as one |
+| **POR.14** | Recordings | **Recordings** — per-call, audio loads only on play |
+| **POR.8** | Outbound CTAs | **Call Mom now / Start the call / Just listen in** (rings you first) |
+| **(copilot)** | Live steering | **Live call** — listen · gentle nudge · speak in your voice |
+| **Digest** | KB candidates | **For your review** — one card, *Add / Skip / Not true*, `1 of 3` |
+| **POR.4** | Interview | **Fill a gap together** — voice-first, one question, progress ring |
+| **POR.7** | Voice-memo + sandbox | 🎙️ **FAB** (record → confirm) + **"Try a practice run"** sandbox |
+| **POR.9** | Voice / corpus | **Voice & how ready** — quality ring, clone status, third-party acceptance, coverage bars |
+| **POR.10** | Prompt sections | **How the twin talks** — sections + diff + **version history / roll back**, required change-note |
+| **POR.12** | Tuning | **How it handles things** — check-in words, name pronunciations, gentle responses |
+| **POR.2** | Forwarding | **Phone forwarding** — carrier, tap-to-dial activation, test, pause, "call me for help" |
+| **POR.3** | Consent | **What you've allowed** — granular toggles with plain consequences |
+| **POR.1** | Onboarding / readiness | **Is the twin ready?** — % + go-live checklist |
+| **POR.15** | Persona switcher | **Switch patient** — only the chosen one shows |
+| **POR.16** | Termination | **Leave the program** — gentle 3-step walkthrough, nothing deleted without confirm |
+| — | Memory book / Promises / Routines | plain sections + add |
+
+Tap the `demo ⚙` chip to flip calm/attention or jump straight to any management screen.
 
 ## The principles it embodies
 1. **One glance answers "is everything okay?"** — a verdict, not two alarming numbers.

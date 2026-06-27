@@ -1,8 +1,9 @@
 <!doctype html>
 <!-- ProxiCare caregiver-portal UX demo (Portal B · the family-caregiver lens, 50+).
      Self-contained: no build, no network, mock data. Open index.html directly.
+     Covers all apps/UX component tasks POR.1–POR.16 in caregiver language.
      Embodies the 8 caregiver-first principles + accessibility (semantic controls,
-     AA contrast, scalable rem, keyboard, color+word, reduced-motion, aria-live).
+     AA contrast, scalable rem, keyboard, color+word, aria-live, reduced-motion).
      NOT the operator console (that stays the dense s2 portal). See README.md. -->
 <html lang="en">
 <head>
@@ -11,80 +12,67 @@
 <title>ProxiCare — Looking after Mom</title>
 <style>
   :root{
-    /* warm, calm palette — text colors verified ≥ 4.5:1 on the cream surfaces */
     --bg:#efe9dd; --surface:#fbf8f2; --sunk:#f1ece1; --line:#e2d9c8;
-    --ink:#2b2722; --ink-2:#4a443c; --ink-3:#6b6457;            /* 3 readable text tiers */
-    --accent:#b4532e; --accent-ink:#8f3f20;                      /* action (terracotta) */
-    --calm:#3f7d54; --calm-soft:#e6f0e6;                         /* okay / positive */
-    --look:#9a6a1a; --look-soft:#f7ecd4;                         /* worth a look (amber) */
-    --alert:#b23b2e; --alert-soft:#f8e4df;                       /* needs you (soft red) */
+    --ink:#2b2722; --ink-2:#4a443c; --ink-3:#6b6457;
+    --accent:#b4532e; --accent-ink:#8f3f20;
+    --calm:#3f7d54; --calm-soft:#e6f0e6;
+    --look:#9a6a1a; --look-soft:#f7ecd4;
+    --alert:#b23b2e; --alert-soft:#f8e4df;
     --rad:18px; --tap:54px;
     --serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    font-size:18px;                                              /* large base; everything in rem scales */
+    font-size:18px;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0}
+  *{box-sizing:border-box} html,body{margin:0}
   body{background:var(--bg);font-family:var(--sans);color:var(--ink);line-height:1.5;
        -webkit-font-smoothing:antialiased;display:flex;justify-content:center;min-height:100vh}
-  /* phone frame on desktop; full-bleed on small screens */
   .phone{width:100%;max-width:430px;background:var(--surface);min-height:100vh;position:relative;
          display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(60,40,20,.18)}
   @media(min-width:480px){ .phone{margin:24px 0;min-height:880px;height:880px;border-radius:38px;
          overflow:hidden;border:1px solid var(--line)} body{align-items:flex-start} }
 
-  /* ---- top bar ---- */
   .top{display:flex;align-items:center;gap:.5rem;padding:1rem 1.15rem .5rem;min-height:56px}
   .back{appearance:none;border:none;background:var(--sunk);color:var(--ink);width:44px;height:44px;
         border-radius:50%;font-size:1.25rem;cursor:pointer;display:grid;place-items:center}
   .top h2{font-family:var(--serif);font-size:1.3rem;margin:0;font-weight:600}
   .eyebrow{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
 
-  /* ---- scroll area + bottom nav ---- */
-  .stage{flex:1;overflow-y:auto;padding:0 1.15rem 1.5rem;-webkit-overflow-scrolling:touch}
+  .stage{flex:1;overflow-y:auto;padding:0 1.15rem 5.5rem;-webkit-overflow-scrolling:touch;position:relative}
   .nav{display:flex;border-top:1px solid var(--line);background:var(--surface)}
   .nav button{flex:1;appearance:none;border:none;background:none;cursor:pointer;padding:.55rem 0 .7rem;
-       color:var(--ink-3);font-size:.78rem;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--sans)}
+       color:var(--ink-3);font-size:.74rem;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--sans)}
   .nav button[aria-current="page"]{color:var(--accent-ink);font-weight:700}
-  .nav .ic{font-size:1.4rem;line-height:1}
+  .nav .ic{font-size:1.35rem;line-height:1}
 
-  /* ---- cards & blocks ---- */
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:1.1rem 1.15rem;margin-bottom:.85rem}
   .hero{padding:1.25rem}
   .hero.alert{background:var(--alert-soft);border-color:#eccabf}
   .hero.calm{background:var(--calm-soft);border-color:#cfe3cf}
-  .hero h3{font-family:var(--serif);font-size:1.65rem;line-height:1.2;margin:.5rem 0 .5rem;font-weight:600}
+  .hero h3{font-family:var(--serif);font-size:1.6rem;line-height:1.2;margin:.5rem 0;font-weight:600}
   .hero p{margin:.25rem 0 1rem;color:var(--ink-2);font-size:1.02rem}
   .row{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;appearance:none;cursor:pointer;
        background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);
        padding:.95rem 1.05rem;margin-bottom:.7rem;font:inherit;color:inherit;min-height:var(--tap)}
   .row .rtitle{font-weight:600;font-size:1.05rem}
-  .row .rsub{color:var(--ink-3);font-size:.9rem;margin-top:1px}
+  .row .rsub{color:var(--ink-3);font-size:.88rem;margin-top:1px}
   .row .chev{margin-left:auto;color:var(--ink-3);font-size:1.3rem}
   .row .lead{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;flex:none;background:var(--sunk)}
 
-  .pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;
-        padding:.28rem .6rem;border-radius:999px}
-  .pill.alert{background:var(--alert);color:#fff}
-  .pill.look{background:var(--look);color:#fff}
-  .pill.calm{background:var(--calm);color:#fff}
-  .pill.soft{background:var(--sunk);color:var(--ink-2)}
+  .pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;padding:.28rem .6rem;border-radius:999px}
+  .pill.alert{background:var(--alert);color:#fff}.pill.look{background:var(--look);color:#fff}
+  .pill.calm{background:var(--calm);color:#fff}.pill.soft{background:var(--sunk);color:var(--ink-2)}
   .dot{width:.55rem;height:.55rem;border-radius:50%;flex:none}
 
-  .btn{appearance:none;border:none;border-radius:14px;font:inherit;font-weight:700;cursor:pointer;
-       width:100%;min-height:var(--tap);font-size:1.05rem}
-  .btn.primary{background:var(--accent);color:#fff}
-  .btn.ghost{background:var(--sunk);color:var(--ink);font-weight:600}
-  .btn.calm{background:var(--calm);color:#fff}
-  .btnrow{display:flex;gap:.6rem;margin-top:.5rem}
-  .btnrow .btn{flex:1}
+  .btn{appearance:none;border:none;border-radius:14px;font:inherit;font-weight:700;cursor:pointer;width:100%;min-height:var(--tap);font-size:1.05rem}
+  .btn.primary{background:var(--accent);color:#fff}.btn.ghost{background:var(--sunk);color:var(--ink);font-weight:600}
+  .btn.calm{background:var(--calm);color:#fff}.btn.danger{background:#fff;color:var(--alert);border:1.5px solid var(--alert)}
+  .btnrow{display:flex;gap:.6rem;margin-top:.5rem}.btnrow .btn{flex:1}
 
   .reassure{text-align:center;color:var(--ink-3);font-size:.92rem;margin:1.4rem .5rem .4rem}
   .muted{color:var(--ink-3)} .small{font-size:.85rem}
-  .section-label{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
-        font-weight:600;margin:1.3rem .2rem .5rem}
+  .section-label{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:1.3rem .2rem .5rem}
+  .intro{color:var(--ink-2);margin:.2rem .1rem 1rem}
 
-  /* chat bubbles for "what was said" */
   .bubble{max-width:84%;padding:.7rem .9rem;border-radius:16px;margin:.5rem 0;font-size:1rem}
   .bubble.twin{background:var(--calm-soft);margin-left:auto;border-bottom-right-radius:5px}
   .bubble.mom{background:var(--sunk);border-bottom-left-radius:5px}
@@ -94,38 +82,45 @@
   .listen{width:100%;min-height:48px;border-radius:14px;border:1px dashed var(--line);background:var(--sunk);
           font:inherit;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin:.6rem 0}
   .progress{font-size:.85rem;color:var(--ink-3);font-weight:600}
-  .mic{width:120px;height:120px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;
-       font-size:2.6rem;display:grid;place-items:center;margin:1.2rem auto;box-shadow:0 14px 36px rgba(180,83,46,.4)}
+  .mic{width:118px;height:118px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;
+       font-size:2.6rem;display:grid;place-items:center;margin:1.1rem auto;box-shadow:0 14px 36px rgba(180,83,46,.4)}
   .ring{--p:0;width:128px;height:128px;border-radius:50%;margin:1rem auto;display:grid;place-items:center;
         background:conic-gradient(var(--calm) calc(var(--p)*1%), var(--sunk) 0)}
   .ring > div{width:104px;height:104px;border-radius:50%;background:var(--surface);display:grid;place-items:center;text-align:center}
   .ring b{font-family:var(--serif);font-size:1.7rem}
-  .barrow{display:flex;align-items:center;gap:.7rem;margin:.5rem 0;font-size:.95rem}
+  .barrow{display:flex;align-items:center;gap:.7rem;margin:.55rem 0;font-size:.95rem}
+  .barrow .bl{width:9rem;flex:none}.barrow .bn{width:2.6rem;text-align:right;color:var(--ink-3);font-size:.85rem}
   .bar{flex:1;height:9px;background:var(--sunk);border-radius:999px;overflow:hidden}
   .bar i{display:block;height:100%;background:var(--calm);border-radius:999px}
-  .field{width:100%;min-height:var(--tap);border:1px solid var(--line);border-radius:14px;padding:.7rem .9rem;
-         font:inherit;background:var(--surface);color:var(--ink);margin:.3rem 0 .9rem}
+  .field{width:100%;min-height:var(--tap);border:1px solid var(--line);border-radius:14px;padding:.7rem .9rem;font:inherit;background:var(--surface);color:var(--ink);margin:.3rem 0 .9rem}
   label.lbl{font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
-  .toggle{display:flex;justify-content:space-between;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--line)}
-  .switch{width:52px;height:30px;border-radius:999px;border:none;cursor:pointer;position:relative;background:var(--calm)}
+  .toggle{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.85rem 0;border-bottom:1px solid var(--line)}
+  .toggle:last-child{border-bottom:none}
+  .switch{width:52px;height:30px;border-radius:999px;border:none;cursor:pointer;position:relative;background:var(--calm);flex:none}
   .switch[aria-checked="false"]{background:var(--line)}
   .switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
   .switch[aria-checked="true"]::after{left:25px}
+  .chip{display:inline-block;padding:.45rem .8rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);
+        font:inherit;font-size:.9rem;cursor:pointer;margin:.2rem .35rem .2rem 0}
+  .chip[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .diff li{list-style:none}.diff .add{background:var(--calm-soft)}.diff .del{background:var(--alert-soft);text-decoration:line-through;color:var(--ink-3)}
+  .stepbar{display:flex;gap:6px;margin:.2rem 0 1rem}.stepbar i{flex:1;height:6px;border-radius:99px;background:var(--sunk)}.stepbar i.on{background:var(--calm)}
 
-  /* focus + motion accessibility */
   a,button,[tabindex]{outline:none}
   :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  .live-dot{animation:pulse 1.5s infinite}
   @keyframes pulse{0%{opacity:1}50%{opacity:.35}100%{opacity:1}}
 
-  /* demo control (not part of product) */
-  .demo{position:absolute;right:12px;bottom:74px;z-index:9}
-  .demo button{background:#2b2722;color:#fff;border:none;border-radius:999px;padding:.5rem .8rem;font-size:.8rem;cursor:pointer}
-  .demo .panel{position:absolute;right:0;bottom:44px;background:#2b2722;color:#fff;border-radius:14px;padding:.7rem;width:210px;display:none}
+  .fab{position:absolute;right:16px;bottom:16px;z-index:8;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;
+       background:var(--accent);color:#fff;font-size:1.5rem;box-shadow:0 12px 30px rgba(180,83,46,.4)}
+  .demo{position:absolute;left:12px;bottom:74px;z-index:9}
+  .demo button{background:#2b2722;color:#fff;border:none;border-radius:999px;padding:.5rem .8rem;font-size:.78rem;cursor:pointer}
+  .demo .panel{position:absolute;left:0;bottom:44px;background:#2b2722;color:#fff;border-radius:14px;padding:.7rem;width:210px;display:none;max-height:60vh;overflow:auto}
   .demo .panel.open{display:block}
-  .demo .panel h4{margin:.1rem 0 .5rem;font-size:.8rem;opacity:.7;text-transform:uppercase;letter-spacing:.06em}
-  .demo .panel button{display:block;width:100%;text-align:left;background:#3a352e;margin:.25rem 0;border-radius:8px}
+  .demo .panel h4{margin:.4rem 0 .3rem;font-size:.72rem;opacity:.7;text-transform:uppercase;letter-spacing:.06em}
+  .demo .panel button{display:block;width:100%;text-align:left;background:#3a352e;margin:.22rem 0;border-radius:8px;font-size:.8rem}
+  .sheet{position:absolute;inset:0;background:rgba(30,24,18,.45);z-index:20;display:flex;align-items:flex-end}
+  .sheet .inner{background:var(--surface);width:100%;border-radius:22px 22px 0 0;padding:1.2rem 1.15rem 1.5rem;max-height:86%;overflow:auto}
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
@@ -133,6 +128,7 @@
 <div class="phone">
   <div class="top" id="top"></div>
   <main class="stage" id="stage" tabindex="-1"></main>
+  <button class="fab" id="fab" aria-label="Add a memory by voice" onclick="openMemo()" style="display:none">🎙️</button>
   <nav class="nav" id="nav" aria-label="Main"></nav>
 
   <div class="demo">
@@ -140,283 +136,373 @@
       <h4>Demo state</h4>
       <button onclick="setState('attention')">A tough moment happened</button>
       <button onclick="setState('calm')">A calm day (all is well)</button>
-      <h4 style="margin-top:.6rem">Jump to</h4>
-      <button onclick="go('memory')">Memory book</button>
-      <button onclick="go('gap')">Fill a gap (voice)</button>
-      <button onclick="go('account')">Settings &amp; consent</button>
+      <h4>Manage the twin</h4>
+      <button onclick="go('voice')">Voice &amp; corpus (POR.9)</button>
+      <button onclick="go('talks')">How the twin talks (POR.10)</button>
+      <button onclick="go('handles')">How it handles things (POR.12)</button>
+      <h4>Setup &amp; account</h4>
+      <button onclick="go('readiness')">Go-live readiness (POR.1/9)</button>
+      <button onclick="go('forwarding')">Forwarding (POR.2)</button>
+      <button onclick="go('consent')">Consent (POR.3)</button>
+      <button onclick="go('alerts')">Alerts (POR.5)</button>
+      <button onclick="go('switch')">Switch patient (POR.15)</button>
+      <button onclick="go('leave')">Leave program (POR.16)</button>
     </div>
     <button onclick="document.getElementById('demoPanel').classList.toggle('open')" aria-label="Demo controls">demo ⚙</button>
   </div>
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────────────────────────────
-// Mock data — system events already TRANSLATED into how a daughter thinks.
-// (Principle 3: plain human language; Principle 2: the system did the triage.)
-const PATIENT = { name:"Mom", who:"your mother", age:83, stage:"moderate-stage Alzheimer's" };
+// ── mock data: system events already translated into how a daughter thinks ──
+const PATIENT={name:"Mom",who:"your mother",age:83,stage:"moderate-stage Alzheimer's",voice:"alex_clean"};
+let STATE="attention";
+const PERSONAS=[{id:"mom",label:"Mom (your twin “Alex”)",active:true},{id:"rosa",label:"Aunt Rosa"}];
 
-let STATE = "attention";  // "attention" | "calm"  (demo toggles principle 1 & 6)
-
-const MOMENT = {
-  tone:"alert", kind:"A tough moment this morning", when:"Today, 9:21 AM · from an 11-minute call",
+const MOMENT={tone:"alert",kind:"A tough moment this morning",when:"Today, 9:21 AM · from an 11-minute call",
   summary:"Mom got upset looking for Dad near the end of the call. The twin stayed calm, reassured her, and the call ended gently.",
-  said:[
-    {who:"the twin", t:"It's me. It's Thursday. The garden's probably waking up about now."},
-    {who:"Mom", t:"The roses… your father planted the roses. Where is he? He didn't come down."},
-    {who:"Mom", t:"He's late. He's never late. Something's wrong, I can feel it.", flag:"This is the upsetting moment"},
-    {who:"the twin", t:"Let's take a breath together. You're safe, and I'm right here with you."},
-  ],
-  adjust:"Mom gets upset looking for Dad. You can soften how the twin responds, or have it tell you sooner."
-};
-
-const APPROVALS = [
-  { tags:["From a call","Life stories"], text:"Mom planted the roses with Dad; she may ask where he is." },
-  { tags:["From a call","People"], text:"Mom calls her neighbour “the kind young man next door.”" },
-  { tags:["You said it"], text:"Mom likes her tea with a little honey, not sugar." },
-];
-
-const CALLS = [
-  { affect:"tough", when:"Today, 9:14 AM", len:"11 min", text:"Mom talked about the garden and asked twice when you're visiting. Warm, a little forgetful. One tough moment near the end — handled gently." },
-  { affect:"calm", when:"Yesterday, 6:40 PM", len:"7 min", text:"Quiet check-in before dinner. She mentioned Dr. Reyes on Tuesday and that Sarah called." },
-  { affect:"bright", when:"Yesterday, 8:55 AM", len:"9 min", text:"Good morning call. Reminisced about Sanibel Island. Took her medication prompt well." },
-  { affect:"calm", when:"Mon, 9:02 AM", len:"6 min", text:"Short and steady. Asked about the weather and the cat." },
-];
-const AFFECT = { tough:{c:"var(--look)",w:"a tough moment"}, calm:{c:"var(--calm)",w:"calm"}, bright:{c:"var(--calm)",w:"bright"} };
-
-const MEMORY = {
-  "People":["Dad — her husband, planted the roses together","Sarah — her daughter, calls on weekends","“The kind young man next door”"],
-  "Life stories":["Summers at Sanibel Island collecting shells","Taught third grade for 30 years","Met Dad at a church dance in 1961"],
-  "Likes & comforts":["Tea with a little honey","The garden, especially the roses","Her cat, Biscuit"],
-  "Health & care notes":["Morning medication around 9 AM","Dr. Reyes — next visit Tuesday","Gets anxious in the late afternoon"],
-};
-
-const GAPS = [
-  { q:"What's a story Mom loves to retell?", area:"Life stories" },
-  { q:"Who are the people she asks about most?", area:"People" },
-  { q:"What helps her settle when she's anxious?", area:"Comfort" },
-];
-
-const PROMISES = [
-  { text:"Sarah is visiting on Sunday afternoon", when:"until Sunday", live:true },
-  { text:"Rami will call tonight at 7", when:"until tonight", live:true },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// tiny router — a linear stack: every screen has ONE back step (Principle 4)
-const stage = document.getElementById('stage');
-const topEl = document.getElementById('top');
-let stack = [];
-
-function go(name, opts={}){ stack.push({name,opts}); render(); }
-function back(){ stack.pop(); render(); }
-function root(name){ stack=[{name,opts:{}}]; render(); }
-
-const SCREENS = {}; // name -> {title, back, render}
-
-function render(){
-  const cur = stack[stack.length-1] || {name:"home",opts:{}};
-  const s = SCREENS[cur.name];
-  // top bar
-  if(cur.name==="home"){
-    topEl.innerHTML = `<div><div class="eyebrow">Good morning</div><h2>Looking after ${PATIENT.name}</h2></div>
-       <div style="margin-left:auto" class="lead" aria-hidden="true">🌿</div>`;
-  } else {
-    topEl.innerHTML = `<button class="back" onclick="back()" aria-label="Go back">‹</button><h2>${s.title}</h2>`;
-  }
-  stage.innerHTML = s.render(cur.opts);
-  stage.scrollTop = 0; stage.focus();
-  renderNav(cur.name);
-}
-
-function renderNav(active){
-  const items=[["home","🏠","Home"],["memory","📖","Memory book"],["account","⚙️","Settings"]];
-  document.getElementById('nav').innerHTML = items.map(([id,ic,lbl])=>
-    `<button onclick="root('${id}')" ${active===id?'aria-current="page"':''}>
-       <span class="ic" aria-hidden="true">${ic}</span><span>${lbl}</span></button>`).join('');
-}
-
-function setState(s){ STATE=s; document.getElementById('demoPanel').classList.remove('open'); root('home'); }
-
-// ── HOME — answers one question: "Is everything okay?" (Principle 1, 2, 6) ──
-SCREENS.home = { title:"Home", render(){
-  const verdict = STATE==="attention"
-    ? `<div class="hero alert card" role="status" aria-live="polite">
-         <span class="pill alert"><span class="dot" style="background:#fff"></span> One thing to look at</span>
-         <h3>${MOMENT.kind}</h3>
-         <p>${MOMENT.summary}</p>
-         <button class="btn primary" onclick="go('moment')">See what happened</button>
-       </div>`
-    : `<div class="hero calm card" role="status" aria-live="polite">
-         <span class="pill calm">✓ Everything's calm</span>
-         <h3>${PATIENT.name} had a calm morning</h3>
-         <p>A gentle 9-minute call. Nothing needs you right now — you can breathe easy.</p>
-         <button class="btn ghost" onclick="go('activity')">Listen if you'd like</button>
-       </div>`;
-  const secondary = [
-    STATE==="attention" ? row("🟡","Worth a look","Mom seemed unsure whether she'd eaten · yesterday","go('moment2')") : "",
-    row("🌱",`${APPROVALS.length} things to approve`,"New things the twin learned about Mom","go('approve')"),
-    row("📞","Recent calls","4 this week · all gentle, all replayable","go('activity')"),
-    row("🎙️","Fill a gap together","Tell the twin more about Mom — just talk","go('gap')"),
-  ].join("");
-  return verdict + `<div style="margin-top:.4rem">${secondary}</div>` +
-    `<p class="reassure">The twin is always growing — never “done.” You're doing enough. 💛</p>`;
-}};
-
-function row(icon,title,sub,onclick){
-  return `<button class="row" onclick="${onclick}">
-    <span class="lead" aria-hidden="true">${icon}</span>
-    <span><span class="rtitle">${title}</span><br><span class="rsub">${sub}</span></span>
-    <span class="chev" aria-hidden="true">›</span></button>`;
-}
-
-// ── MOMENT — one event, story-framed, snippet audio, one clear action ──
-function momentScreen(m){ return {
-  title:"What happened", render(){
-    const said = m.said.map(b=>`
-      <div class="bubble ${b.who==='the twin'?'twin':'mom'}">
-        <div class="who">${b.who==='the twin'?'THE TWIN':PATIENT.name.toUpperCase()}</div>${b.t}
-        ${b.flag?`<div class="flagged">⚑ ${b.flag}</div>`:''}
-      </div>`).join("");
-    return `
-      <span class="pill ${m.tone}">${m.tone==='alert'?'Needs you':'Worth a look'}</span>
-      <h3 style="font-family:var(--serif);font-size:1.5rem;margin:.6rem 0 .2rem">${m.kind}</h3>
-      <div class="muted small" style="margin-bottom:.8rem">${m.when}</div>
-      <div class="card" style="background:${m.tone==='alert'?'var(--alert-soft)':'var(--look-soft)'};border:none">${m.summary}</div>
-      <div class="section-label">What was said</div>
-      ${said}
-      <button class="listen" onclick="say('Playing just this moment…')">▶ Listen to this moment</button>
-      <div class="card"><b>Want to change how this goes?</b><br><span class="muted">${m.adjust}</span>
-        <div class="btnrow"><button class="btn ghost" onclick="say('Opened: soften the twin’s response')">Adjust the twin</button></div></div>
-      <div class="btnrow">
-        <button class="btn primary" onclick="say('Marked reviewed · nice work');back()">Mark reviewed</button>
-        <button class="btn ghost" onclick="say('Thanks — that helps the twin learn');back()">This was fine</button>
-      </div>`;
-  }};
-}
-SCREENS.moment = momentScreen(MOMENT);
-SCREENS.moment2 = momentScreen({ tone:"look", kind:"Mom seemed unsure", when:"Yesterday, 6:51 PM · from a 7-minute call",
+  said:[{who:"the twin",t:"It's me. It's Thursday. The garden's probably waking up about now."},
+        {who:"Mom",t:"The roses… your father planted the roses. Where is he? He didn't come down."},
+        {who:"Mom",t:"He's late. He's never late. Something's wrong, I can feel it.",flag:"This is the upsetting moment"},
+        {who:"the twin",t:"Let's take a breath together. You're safe, and I'm right here with you."}],
+  adjust:"Mom gets upset looking for Dad. You can soften how the twin responds, or have it tell you sooner."};
+const MOMENT2={tone:"look",kind:"Mom seemed unsure",when:"Yesterday, 6:51 PM · from a 7-minute call",
   summary:"Mom wasn't sure whether she'd eaten. Worth a glance, not urgent.",
   said:[{who:"Mom",t:"Did I have lunch? I can't… I don't think I did."},
         {who:"the twin",t:"You had soup a little while ago — and there's more whenever you're hungry."}],
-  adjust:"If this keeps happening, the twin can gently remind her about meals." });
+  adjust:"If this keeps happening, the twin can gently remind her about meals."};
 
-// ── APPROVE — one card at a time, big plain choices, progress (Principle 2,5,6) ──
-SCREENS.approve = { title:"For your review", render(opts){
-  const i = opts.i||0;
-  if(i>=APPROVALS.length) return `<div style="text-align:center;padding:3rem 1rem">
-     <div style="font-size:3rem">✓</div><h3 style="font-family:var(--serif)">All done</h3>
-     <p class="muted">Nothing else to review. The twin will keep learning — we'll save it up for you.</p>
-     <button class="btn primary" onclick="back()">Back home</button></div>`;
-  const a = APPROVALS[i];
-  return `<div class="progress" style="text-align:right">${i+1} of ${APPROVALS.length}</div>
-    <div class="card" style="margin-top:.4rem">
-      <div>${a.tags.map(t=>`<span class="pill soft" style="margin-right:.3rem">${t}</span>`).join("")}</div>
-      <p style="font-family:var(--serif);font-size:1.35rem;line-height:1.3;margin:.7rem 0 .3rem">${a.text}</p>
-      <button class="listen" style="min-height:40px" onclick="say('Edit before adding…')">✎ Edit before adding</button>
-    </div>
-    <button class="btn calm" onclick="say('Added to the memory book');go('approve',{i:${i+1}})">✓ Add to memory book</button>
-    <div class="btnrow">
-      <button class="btn ghost" onclick="go('approve',{i:${i+1}})">Skip for now</button>
-      <button class="btn ghost" onclick="say('Got it — won’t add that');go('approve',{i:${i+1}})">Not true</button>
-    </div>
-    <p class="reassure">Adding puts it in Mom's memory book — the twin uses it on the next call.</p>`;
+const APPROVALS=[
+  {tags:["From a call","Life stories"],text:"Mom planted the roses with Dad; she may ask where he is."},
+  {tags:["From a call","People"],text:"Mom calls her neighbour “the kind young man next door.”"},
+  {tags:["You said it"],text:"Mom likes her tea with a little honey, not sugar."}];
+
+const CALLS=[
+  {affect:"tough",when:"Today, 9:14 AM",len:"11 min",tracks:3,text:"Talked about the garden, asked twice when you're visiting. One tough moment near the end — handled gently.",
+   chapters:[["0:00","Warm hello"],["3:40","The garden & roses"],["8:10","Looking for Dad — upset"],["9:30","Calmed, gentle goodbye"]]},
+  {affect:"calm",when:"Yesterday, 6:40 PM",len:"7 min",tracks:1,text:"Quiet check-in before dinner. Mentioned Dr. Reyes on Tuesday and that Sarah called."},
+  {affect:"bright",when:"Yesterday, 8:55 AM",len:"9 min",tracks:2,text:"Good morning call. Reminisced about Sanibel Island. Took her medication prompt well."},
+  {affect:"calm",when:"Mon, 9:02 AM",len:"6 min",tracks:2,text:"Short and steady. Asked about the weather and the cat. (Call dropped & she called back — shown as one.)"}];
+const AFFECT={tough:{c:"var(--look)",w:"a tough moment"},calm:{c:"var(--calm)",w:"calm"},bright:{c:"var(--calm)",w:"bright"}};
+
+const MEMORY={
+  "People":["Dad — her husband, planted the roses together","Sarah — her daughter, calls on weekends","“The kind young man next door”"],
+  "Life stories":["Summers at Sanibel Island collecting shells","Taught third grade for 30 years","Met Dad at a church dance in 1961"],
+  "Likes & comforts":["Tea with a little honey","The garden, especially the roses","Her cat, Biscuit"],
+  "Health & care notes":["Morning medication around 9 AM","Dr. Reyes — next visit Tuesday","Gets anxious in the late afternoon"]};
+
+const GAPS=[{q:"What's a story Mom loves to retell?",area:"Life stories"},
+            {q:"Who are the people she asks about most?",area:"People"},
+            {q:"What helps her settle when she's anxious?",area:"Comfort"}];
+
+const COVERAGE=[["Who she is",88],["People",64],["Places",40],["Life stories",60],["Comforts",75],["Routines",20],["Health (light)",100]];
+const VOICE={quality:74,clone:"Ready — “alex_clean”",accepted:"Sarah confirmed it sounds like you",minutes:176};
+
+const SECTIONS=[
+  {id:"preamble",name:"Who the twin is",desc:"The core framing — your son, calling his father.",v:3},
+  {id:"speech",name:"How it should sound",desc:"Short and warm, like a son on the phone.",v:1},
+  {id:"comfort",name:"Calming topics",desc:"Where to steer when she's stuck or upset.",v:2},
+  {id:"rules",name:"Hard rules",desc:"Things the twin must never do.",v:1}];
+
+const CHECKINS=["Mom, are you still there?","Take your time, I'm here when you're ready.","I'm still here with you, Mom.","No rush, Mom. I'm right here."];
+const PRONOUN=[["Eli","EH-lee"],["Sanibel","SAN-ih-bell"]];
+const REACTIONS=[["When she needs reassurance","Affirm warmly, slow down, stay close."],["When she's confused about time","Gently orient — day, light outside — never argue."],["When she asks for Dad","Acknowledge the feeling, steer to a warm memory; don't insist he's gone."]];
+
+const CONSENT=[
+  {k:"A",t:"Record calls",sub:"So you can listen back",on:true,cons:"Turning this off stops recording and pauses saved transcripts."},
+  {k:"E",t:"Let the twin listen to your calls",sub:"To learn Mom's voice & stories",on:true,cons:"Turning this off stops forwarding — the twin can't learn from real calls."},
+  {k:"F",t:"Use your voice for interviews",sub:"Powers “fill a gap”",on:true,cons:"Turning this off ends voice interviews; past interview audio is erased."},
+  {k:"clone",t:"Keep the cloned voice",sub:"How the twin sounds like you",on:true,cons:"Turning this off erases the voice clone — the twin can no longer speak."}];
+
+const CONTACTS=[{name:"You (Ivan)",role:"first to know",you:true},{name:"Carol — Mom's sister",role:"backup"},{name:"Dr. Reyes' office",role:"last resort"}];
+const PRESETS=["Gentle (fewer alerts)","Balanced","Watchful (more alerts)"];
+
+const PROMISES=[{text:"Sarah is visiting Sunday afternoon",when:"until Sunday",live:true},{text:"Rami will call tonight at 7",when:"until tonight",live:true}];
+const ROUTINES=[{t:"Morning",d:"Coffee, then the garden. Ask how she slept."},{t:"Medication",d:"Around 9 AM — gently remind, don't nag."},{t:"Bedtime",d:"Wind down by 9. The cat usually settles with her."}];
+
+const READY=[["Phone calls reach the twin","Connected — and it transfers to you",true],
+  ["You've allowed recording","Signed June 9",true],["The cloned voice is ready","“alex_clean” — confirmed by Sarah",true],
+  ["The twin knows how to talk","11 guidance sections written",true],["Memory book is rich","167 memories",true],
+  ["One supervised first call","Done — you listened in",true]];
+
+// ── router: shallow hub-and-spoke, always a back arrow ──
+const stage=document.getElementById('top'),stg=document.getElementById('stage');
+let stack=[];
+function go(n,o={}){document.getElementById('demoPanel').classList.remove('open');stack.push({n,o});render();}
+function back(){stack.pop();render();}
+function root(n){stack=[{n,o:{}}];render();}
+const SCREENS={};
+const HUB={home:'home',calls:'calls',activity:'calls',call:'calls',recordings:'calls',escal:'calls',moment:'calls',moment2:'calls',live:'calls',
+  memory:'memory',approve:'memory',membook:'memory',memlist:'memory',gap:'memory',voice:'memory',talks:'memory',section:'memory',handles:'memory',sandbox:'memory',
+  settings:'settings',forwarding:'settings',consent:'settings',alerts:'settings',promises:'settings',routines:'settings',readiness:'settings',switch:'settings',account:'settings',leave:'settings'};
+
+function render(){
+  const cur=stack[stack.length-1]||{n:"home",o:{}};const s=SCREENS[cur.n];
+  if(cur.n==="home"){stage.innerHTML=`<div><div class="eyebrow">Good morning</div><h2>Looking after ${PATIENT.name}</h2></div><div class="lead" style="margin-left:auto" aria-hidden="true">🌿</div>`;}
+  else{stage.innerHTML=`<button class="back" onclick="back()" aria-label="Go back">‹</button><h2>${s.title}</h2>`;}
+  stg.innerHTML=s.render(cur.o);stg.scrollTop=0;stg.focus();
+  document.getElementById('fab').style.display=(HUB[cur.n]==='memory'||cur.n==='home')?'block':'none';
+  renderNav(HUB[cur.n]||cur.n);
+}
+function renderNav(active){
+  const items=[["home","🏠","Home"],["calls","📞","Calls"],["memory","📖","Memory"],["settings","⚙️","Settings"]];
+  document.getElementById('nav').innerHTML=items.map(([id,ic,l])=>
+    `<button onclick="root('${id}')" ${active===id?'aria-current="page"':''}><span class="ic" aria-hidden="true">${ic}</span><span>${l}</span></button>`).join('');
+}
+function setState(s){STATE=s;document.getElementById('demoPanel').classList.remove('open');root('home');}
+function row(icon,title,sub,onclick){return `<button class="row" onclick="${onclick}"><span class="lead" aria-hidden="true">${icon}</span><span><span class="rtitle">${title}</span><br><span class="rsub">${sub}</span></span><span class="chev" aria-hidden="true">›</span></button>`;}
+function hub(intro,rows){return `<p class="intro">${intro}</p>${rows.join("")}`;}
+
+// ══ HOME (POR.13 dashboard · POR.8 call-now) ══
+SCREENS.home={title:"Home",render(){
+  const verdict=STATE==="attention"
+    ?`<div class="hero alert card" role="status" aria-live="polite"><span class="pill alert"><span class="dot" style="background:#fff"></span> One thing to look at</span>
+       <h3>${MOMENT.kind}</h3><p>${MOMENT.summary}</p><button class="btn primary" onclick="go('moment')">See what happened</button></div>`
+    :`<div class="hero calm card" role="status" aria-live="polite"><span class="pill calm">✓ Everything's calm</span>
+       <h3>${PATIENT.name} had a calm morning</h3><p>A gentle 9-minute call. Nothing needs you right now — you can breathe easy.</p>
+       <button class="btn ghost" onclick="go('activity')">Listen if you'd like</button></div>`;
+  const rows=[STATE==="attention"?row("🟡","Worth a look","Mom seemed unsure whether she'd eaten · yesterday","go('moment2')"):"",
+    row("📞","Call Mom now","Rings you first, then Mom — the twin never self-dials","go('live')"),
+    row("🌱",`${APPROVALS.length} things to approve`,"New things the twin learned about Mom","go('approve')"),
+    row("🎙️","Fill a gap together","Tell the twin more about Mom — just talk","go('gap')")];
+  return verdict+`<div style="margin-top:.4rem">${rows.join("")}</div>`+
+    `<p class="reassure">The twin is always growing — never “done.” You're doing enough. 💛</p>`;
 }};
 
-// ── RECENT CALLS — narrative + affect tags; the system carries the memory (P8) ──
-SCREENS.activity = { title:"Recent calls", render(){
-  return CALLS.map((c,idx)=>{
-    const a=AFFECT[c.affect];
-    return `<button class="row" style="align-items:flex-start" onclick="go('call',{i:${idx}})">
-      <span class="dot" style="background:${a.c};margin-top:.5rem"></span>
-      <span><span class="rtitle">${c.when}</span> · <span class="muted small">${a.w} · ${c.len}</span>
-        <br><span class="rsub">${c.text}</span></span></button>`;
-  }).join("") + `<p class="reassure">Every call is saved and replayable. You never have to remember — we do.</p>`;
-}};
-SCREENS.call = { title:"The call", render(opts){
-  const c=CALLS[opts.i||0]; const a=AFFECT[c.affect];
+// ══ CALLS hub (POR.6 history+skim · POR.8 live · POR.14 recordings · POR.11 escalations) ══
+SCREENS.calls={title:"Calls",render(){return hub("Everything about ${PATIENT.name}'s calls — all gentle, all saved.".replace('${PATIENT.name}',PATIENT.name),[
+  row("📞","Call Mom now","Start a call — rings you first","go('live')"),
+  row("🕑","Recent calls","4 this week · replay or skim","go('activity')"),
+  row("⚑","Tough moments","Things the twin flagged for you","go('escal')"),
+  row("🎧","Recordings","Listen to any call","go('recordings')")]);}};
+
+SCREENS.live={title:"Call Mom",render(){return `
+  <div class="card"><span class="pill soft">Standby</span>
+    <h3 style="font-family:var(--serif);margin:.5rem 0">The twin is ready</h3>
+    <p class="muted">When you call, it rings <b>you</b> first, then Mom — you're always on the line. Mom never gets an unexpected call.</p>
+    <button class="btn primary" style="margin-top:.4rem" onclick="say('Calling you, then Mom…')">📞 Start the call</button>
+    <button class="btn ghost" style="margin-top:.6rem" onclick="say('You’ll be able to listen, nudge, or take over')">Just listen in</button></div>
+  <div class="section-label">When you're on a live call you can</div>
+  ${row("👂","Listen","Hear it live, do nothing else","say('On a real call this is live')")}
+  ${row("💬","Send a gentle nudge","“Remind her about Sunday” — the twin works it in","say('Nudge sent to the twin')")}
+  ${row("🗣️","Speak in your own voice","Take over for a moment, then hand back","say('Patient will hear your voice — with a 3-second heads-up')")}
+  <p class="reassure">A real person is always on every call. The twin never talks to Mom alone.</p>`;}};
+
+SCREENS.activity={title:"Recent calls",render(){return CALLS.map((c,i)=>{const a=AFFECT[c.affect];
+  return `<button class="row" style="align-items:flex-start" onclick="go('call',{i:${i}})"><span class="dot" style="background:${a.c};margin-top:.5rem"></span>
+    <span><span class="rtitle">${c.when}</span> · <span class="muted small">${a.w} · ${c.len}</span><br><span class="rsub">${c.text}</span></span></button>`;}).join("")
+  +`<p class="reassure">Every call is saved and replayable. You never have to remember — we do.</p>`;}};
+
+SCREENS.call={title:"The call",render(o){const c=CALLS[o.i||0],a=AFFECT[c.affect];
+  const chapters=(c.chapters||[]).map(([t,l])=>`<button class="row" style="min-height:46px" onclick="say('Jumping to ${t} — ${l}')"><span class="muted small" style="width:46px">${t}</span><span class="rtitle" style="font-size:.98rem">${l}</span><span class="chev">›</span></button>`).join("");
   return `<div class="card"><span class="pill" style="background:${a.c};color:#fff">${a.w}</span>
-      <div class="muted small" style="margin:.5rem 0">${c.when} · ${c.len}</div>
-      <p style="font-size:1.05rem">${c.text}</p>
-      <button class="listen" onclick="say('Playing the call…')">▶ Listen to the whole call</button></div>
-    ${c.affect==='tough'?`<button class="row" onclick="go('moment')"><span class="lead">🟡</span>
-        <span><span class="rtitle">See the tough moment</span><br><span class="rsub">Jump to what needs you</span></span>
-        <span class="chev">›</span></button>`:''}`;
-}};
+    <div class="muted small" style="margin:.5rem 0">${c.when} · ${c.len}</div><p style="font-size:1.05rem">${c.text}</p>
+    <div class="btnrow"><button class="listen" onclick="say('Playing the call…')">▶ Listen</button>
+      <button class="listen" onclick="say('Speed: 1× → 1.5× → 2×')">⏩ Speed 1×</button></div></div>
+  ${chapters?`<div class="section-label">Skip to a moment</div>${chapters}`:`<p class="muted small">A short call — nothing to skip to.</p>`}
+  ${c.affect==='tough'?row("🟡","See the tough moment","Jump to what needs you","go('moment')"):""}`;}};
 
-// ── MEMORY BOOK — plain sections, voice add (Principle 7) ──
-SCREENS.memory = { title:"Memory book", render(){
-  const secs = Object.entries(MEMORY).map(([k,v])=>
-    row("•",k,`${v.length} memories`,`go('memlist',{k:'${k}'})`)).join("");
-  return `<p class="muted" style="margin:.2rem 0 1rem">Everything the twin knows about ${PATIENT.name}. Tap a section to read or add.</p>
-    ${secs}
-    <button class="btn primary" style="margin-top:.4rem" onclick="go('gap')">🎙️ Add a memory — just talk</button>`;
-}};
-SCREENS.memlist = { title:"Memory book", render(opts){
-  const items=MEMORY[opts.k]||[];
-  return `<div class="section-label">${opts.k}</div>` + items.map(t=>
-    `<div class="card" style="display:flex;gap:.7rem;align-items:flex-start">
-       <span aria-hidden="true">💬</span><span>${t}</span></div>`).join("") +
-    `<button class="btn ghost" onclick="say('Add to ${opts.k}…')">＋ Add to ${opts.k}</button>`;
-}};
+SCREENS.recordings={title:"Recordings",render(){return `<p class="intro">Listen to any call. Audio only loads when you tap play — it stays private until then.</p>`+
+  CALLS.map((c,i)=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center">
+    <div><b>${c.when}</b><br><span class="muted small">${c.tracks} ${c.tracks>1?'tracks':'track'} · ${c.len}</span></div>
+    <button class="btn ghost" style="width:auto;min-height:44px;padding:0 1rem" onclick="say('Loading audio…')">▶ Play</button></div></div>`).join("");}};
 
-// ── FILL A GAP — voice-first interview (Principle 7) ──
-SCREENS.gap = { title:"Fill a gap together", render(opts){
-  const i=opts.i||0;
-  if(i>=GAPS.length) return `<div style="text-align:center;padding:2.5rem 1rem">
-     <div style="font-size:3rem">🌼</div><h3 style="font-family:var(--serif)">Thank you</h3>
-     <p class="muted">You filled 3 gaps. ${PATIENT.name}'s twin just got a little more like her.</p>
-     <button class="btn primary" onclick="back()">Back home</button></div>`;
-  const g=GAPS[i]; const pct=Math.round((i/GAPS.length)*100);
+SCREENS.escal={title:"Tough moments",render(){return `<p class="intro">Moments the twin flagged. Most days have none — that's a good thing.</p>`+
+  row("🔴","A tough moment this morning","Mom got upset looking for Dad · 21h ago","go('moment')")+
+  row("🟡","Mom seemed unsure","Wasn't sure she'd eaten · yesterday","go('moment2')")+
+  `<p class="reassure">When something serious happens, a real person is paged right away — you're never the only safety net.</p>`;}};
+
+function momentScreen(m){return{title:"What happened",render(){
+  const said=m.said.map(b=>`<div class="bubble ${b.who==='the twin'?'twin':'mom'}"><div class="who">${b.who==='the twin'?'THE TWIN':PATIENT.name.toUpperCase()}</div>${b.t}${b.flag?`<div class="flagged">⚑ ${b.flag}</div>`:''}</div>`).join("");
+  return `<span class="pill ${m.tone}">${m.tone==='alert'?'Needs you':'Worth a look'}</span>
+    <h3 style="font-family:var(--serif);font-size:1.5rem;margin:.6rem 0 .2rem">${m.kind}</h3>
+    <div class="muted small" style="margin-bottom:.8rem">${m.when}</div>
+    <div class="card" style="background:${m.tone==='alert'?'var(--alert-soft)':'var(--look-soft)'};border:none">${m.summary}</div>
+    <div class="section-label">What was said</div>${said}
+    <button class="listen" onclick="say('Playing just this moment…')">▶ Listen to this moment</button>
+    <div class="card"><b>Want to change how this goes?</b><br><span class="muted">${m.adjust}</span>
+      <button class="btn ghost" style="margin-top:.6rem" onclick="go('handles')">Adjust the twin</button></div>
+    <div class="btnrow"><button class="btn primary" onclick="say('Marked reviewed · nice work');back()">Mark reviewed</button>
+      <button class="btn ghost" onclick="say('Thanks — that helps the twin learn');back()">This was fine</button></div>`;}};}
+SCREENS.moment=momentScreen(MOMENT);SCREENS.moment2=momentScreen(MOMENT2);
+
+// ══ MEMORY hub (digest · KB · interview · voice/corpus · talks · handles) ══
+SCREENS.memory={title:"Memory",render(){return hub("What the twin knows and how it speaks — keep it true to Mom.",[
+  row("🌱",`${APPROVALS.length} for your review`,"New things to approve","go('approve')"),
+  row("📖","Memory book","Everything the twin knows","go('membook')"),
+  row("🎙️","Fill a gap together","Add more — just talk","go('gap')"),
+  row("🎚️","Voice & how ready","The cloned voice + what's still missing","go('voice')"),
+  row("💬","How the twin talks","Its guidance, with history you can undo","go('talks')"),
+  row("🪶","How it handles things","Check-in words, names, gentle responses","go('handles')")]);}};
+
+SCREENS.approve={title:"For your review",render(o){const i=o.i||0;
+  if(i>=APPROVALS.length)return `<div style="text-align:center;padding:3rem 1rem"><div style="font-size:3rem">✓</div>
+    <h3 style="font-family:var(--serif)">All done</h3><p class="muted">Nothing else to review. The twin keeps learning — we'll save it up for you.</p>
+    <button class="btn primary" onclick="back()">Back</button></div>`;
+  const a=APPROVALS[i];
+  return `<div class="progress" style="text-align:right">${i+1} of ${APPROVALS.length}</div>
+    <div class="card" style="margin-top:.4rem"><div>${a.tags.map(t=>`<span class="pill soft" style="margin-right:.3rem">${t}</span>`).join("")}</div>
+      <p style="font-family:var(--serif);font-size:1.35rem;line-height:1.3;margin:.7rem 0 .3rem">${a.text}</p>
+      <button class="listen" style="min-height:40px" onclick="say('Edit before adding…')">✎ Edit before adding</button></div>
+    <button class="btn calm" onclick="say('Added to the memory book');go('approve',{i:${i+1}})">✓ Add to memory book</button>
+    <div class="btnrow"><button class="btn ghost" onclick="go('approve',{i:${i+1}})">Skip for now</button>
+      <button class="btn ghost" onclick="say('Got it — won’t add that');go('approve',{i:${i+1}})">Not true</button></div>
+    <p class="reassure">Adding puts it in Mom's memory book — the twin uses it on the next call.</p>`;}};
+
+SCREENS.membook={title:"Memory book",render(){return hub("Tap a section to read or add. The twin only says what's in here — it never makes things up.",
+  Object.entries(MEMORY).map(([k,v])=>row("•",k,`${v.length} memories`,`go('memlist',{k:'${k}'})`))) +
+  `<button class="btn primary" onclick="openMemo()">🎙️ Add a memory — just talk</button>`;}};
+SCREENS.memlist={title:"Memory book",render(o){const items=MEMORY[o.k]||[];
+  return `<div class="section-label">${o.k}</div>`+items.map(t=>`<div class="card" style="display:flex;gap:.7rem;align-items:flex-start"><span aria-hidden="true">💬</span><span>${t}</span></div>`).join("")
+  +`<button class="btn ghost" onclick="say('Add to ${o.k}…')">＋ Add to ${o.k}</button>`;}};
+
+SCREENS.gap={title:"Fill a gap together",render(o){const i=o.i||0;
+  if(i>=GAPS.length)return `<div style="text-align:center;padding:2.5rem 1rem"><div style="font-size:3rem">🌼</div>
+    <h3 style="font-family:var(--serif)">Thank you</h3><p class="muted">You filled 3 gaps. Mom's twin just got a little more like her.</p>
+    <button class="btn primary" onclick="back()">Back</button></div>`;
+  const g=GAPS[i],pct=Math.round(i/GAPS.length*100);
   return `<div class="ring" style="--p:${pct}"><div><b>${i}/${GAPS.length}</b><br><span class="small muted">filled</span></div></div>
     <div class="card" style="text-align:center"><span class="pill soft">${g.area}</span>
       <p style="font-family:var(--serif);font-size:1.45rem;line-height:1.3;margin:.7rem 0">${g.q}</p></div>
     <button class="mic" aria-label="Hold to answer with your voice" onclick="say('Listening… answer however you like')">🎙️</button>
     <p style="text-align:center" class="muted">Tap and answer however you like — no right words needed.</p>
-    <div class="btnrow">
-      <button class="btn ghost" onclick="go('gap',{i:${i+1}})">Type instead</button>
-      <button class="btn ghost" onclick="go('gap',{i:${i+1}})">Skip</button>
-    </div>`;
-}};
+    <div class="btnrow"><button class="btn ghost" onclick="go('gap',{i:${i+1}})">Type instead</button>
+      <button class="btn ghost" onclick="go('gap',{i:${i+1}})">Skip</button></div>`;}};
 
-// ── SETTINGS & CONSENT — plain, reassuring, gentle exit (Principle 3,6) ──
-SCREENS.account = { title:"Settings", render(){
-  return `
-    <div class="section-label">How calls reach ${PATIENT.name}</div>
-    <div class="card">
-      <div class="barrow"><span>📱 Mom calls her own number</span></div>
-      <div class="barrow"><span>↳ The twin answers in your cloned voice</span></div>
-      <div class="barrow"><span>↳ It can hand the call to you anytime</span></div>
-    </div>
-    <div class="section-label">What you've allowed</div>
-    <div class="card" style="padding-top:.4rem">
-      ${consent("Record calls","So you can listen back",true)}
-      ${consent("Let the twin listen to your calls","To learn Mom's voice & stories",true)}
-      ${consent("Quiet hours (9pm–8am)","Only urgent things reach you",false)}
-    </div>
-    <div class="section-label">You</div>
-    <div class="card">
-      <label class="lbl">How the twin reaches you</label>
-      <input class="field" value="+1 (218) 630-8231" aria-label="Your phone">
-      <button class="btn ghost" onclick="say('Saved')">Save</button>
-    </div>
-    <button class="btn ghost" style="margin-top:.4rem;color:var(--accent-ink)" onclick="say('We’ll walk you through it gently — nothing happens without your say-so.')">Leave the program</button>
-    <p class="reassure">Big changes (like consent) go through your care coordinator — you're never alone with a hard decision.</p>`;
-}};
-function consent(title,sub,on){
-  return `<div class="toggle"><span><b>${title}</b><br><span class="muted small">${sub}</span></span>
-    <button class="switch" role="switch" aria-checked="${on}" aria-label="${title}"
-      onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked')==='true'?'false':'true')"></button></div>`;
-}
+SCREENS.voice={title:"Voice & how ready",render(){
+  const bars=COVERAGE.map(([k,v])=>`<div class="barrow"><span class="bl">${k}</span><span class="bar"><i style="width:${v}%;background:${v<40?'var(--look)':'var(--calm)'}"></i></span><span class="bn">${v}%</span></div>`).join("");
+  return `<div class="card" style="text-align:center"><div class="ring" style="--p:${VOICE.quality}"><div><b>${VOICE.quality}%</b><br><span class="small muted">how full</span></div></div>
+     <p class="muted">How much the twin knows about Mom. It grows with every call and interview — it's never “done.”</p></div>
+   <div class="card"><b>The cloned voice</b><br><span class="muted">${VOICE.clone} · ${VOICE.minutes} min collected</span>
+     <div class="pill calm" style="margin-top:.6rem">✓ ${VOICE.accepted}</div></div>
+   <div class="section-label">What's well covered, what's thin</div>${bars}
+   <button class="btn primary" onclick="go('gap')">Fill the thin spots — start an interview</button>
+   <p class="reassure">A trusted person who knows your real voice confirms the clone — never just you.</p>`;}};
 
-// toast
-function say(msg){
-  let t=document.getElementById('toast');
+SCREENS.talks={title:"How the twin talks",render(){return hub("Its guidance, in plain sections. Every change is saved with history — you can always undo.",
+  SECTIONS.map(s=>row("✏️",s.name,`${s.desc} · saved ${s.v} version${s.v>1?'s':''}`,`go('section',{id:'${s.id}'})`)));}};
+SCREENS.section={title:"Edit guidance",render(o){const s=SECTIONS.find(x=>x.id===o.id)||SECTIONS[0];
+  return `<h3 style="font-family:var(--serif);margin:.2rem 0">${s.name}</h3><p class="muted small">${s.desc}</p>
+    <textarea class="field" style="min-height:120px">Speak short and warm, like a son on the phone. One idea at a time.</textarea>
+    <label class="lbl">What changed (required)</label><input class="field" placeholder="e.g. softened the goodbye">
+    <button class="btn primary" onclick="say('Saved as a new version — old ones kept')">Save change</button>
+    <div class="section-label">What's different from the last version</div>
+    <ul class="diff card" style="margin:0">
+      <li class="del">Speak warmly.</li><li class="add">Speak short and warm, like a son on the phone. One idea at a time.</li></ul>
+    <div class="section-label">History (${s.v} versions)</div>
+    ${Array.from({length:s.v}).map((_,k)=>`<button class="row" style="min-height:46px" onclick="say('Roll back to v${s.v-k} — makes a new version, nothing is lost')">
+      <span class="rtitle" style="font-size:.95rem">v${s.v-k}</span><span class="muted small">${k===0?'now':'June '+(18-k)}</span><span class="chev">↩</span></button>`).join("")}`;}};
+
+SCREENS.handles={title:"How it handles things",render(){
+  const list=(title,items,sub)=>`<div class="section-label">${title}</div><p class="muted small" style="margin:.1rem .1rem .5rem">${sub}</p>`+
+    items.map(it=>`<div class="card" style="display:flex;justify-content:space-between;gap:.6rem;align-items:center"><span>${it}</span>
+      <span class="muted" aria-hidden="true">✏️</span></div>`).join("")+`<button class="btn ghost" onclick="say('Add…')">＋ Add</button>`;
+  return `<div class="card" style="background:var(--calm-soft);border:none"><b>Try it safely first</b><br>
+      <span class="muted">Pretend to be Mom and hear how the twin would respond — nothing reaches her.</span>
+      <button class="btn calm" style="margin-top:.6rem" onclick="go('sandbox')">Try a practice run</button></div>
+    ${list("What it says when Mom goes quiet",CHECKINS,"It gently rotates through these.")}
+    ${list("How it says names",PRONOUN.map(p=>p[0]+" → “"+p[1]+"”"),"So names sound right.")}
+    ${list("How it responds to feelings",REACTIONS.map(r=>r[0]),"Reassurance, confusion, asking for Dad…")}`;}};
+SCREENS.sandbox={title:"Practice run",render(){return `<p class="intro">Say or type something as Mom would. You'll hear how the twin responds. This never reaches Mom.</p>
+  <div class="bubble mom"><div class="who">YOU (AS MOM)</div>Where's your father? He didn't come down.</div>
+  <div class="bubble twin"><div class="who">THE TWIN</div>I'm right here with you. Let's sit a moment — the garden's looking lovely today.</div>
+  <button class="mic" onclick="say('Listening…')">🎙️</button>
+  <input class="field" placeholder="…or type as Mom"><button class="btn ghost" onclick="say('The twin would respond…')">See the response</button>`;}};
+
+// ══ SETTINGS hub (POR.2/3/5/15/16 + promises/routines/readiness/account) ══
+SCREENS.settings={title:"Settings",render(){return hub("Setup, what you've allowed, and your account.",[
+  row("✅","Is the twin ready?","Go-live checklist","go('readiness')"),
+  row("📲","Phone forwarding","How Mom's calls reach the twin","go('forwarding')"),
+  row("🔒","What you've allowed","Consent — change any piece","go('consent')"),
+  row("🔔","Alerts","Who's told, how, and when","go('alerts')"),
+  row("🤝","Promises","Things the twin should remember to mention","go('promises')"),
+  row("📅","Routines","Mom's daily rhythm","go('routines')"),
+  row("👥","Switch patient","You look after more than one","go('switch')"),
+  row("🙋","Your details","Name & phone","go('account')"),
+  row("🚪","Leave the program","Stop and delete everything","go('leave')")]);}};
+
+SCREENS.readiness={title:"Is the twin ready?",render(){const done=READY.filter(r=>r[2]).length;
+  return `<div class="hero calm card"><div style="display:flex;align-items:baseline;gap:.6rem"><span style="font-family:var(--serif);font-size:2.4rem;font-weight:700">${Math.round(done/READY.length*100)}%</span>
+      <b>${PATIENT.name} is ready</b></div><p style="margin:.4rem 0 0">Everything's in place — the twin answers her calls.</p></div>
+    ${READY.map(([t,s,ok])=>`<div class="card" style="display:flex;gap:.8rem;align-items:center;border-color:${ok?'#cfe3cf':'var(--line)'}">
+      <span style="width:30px;height:30px;border-radius:50%;background:${ok?'var(--calm-soft)':'var(--sunk)'};display:grid;place-items:center;color:var(--calm)">${ok?'✓':'•'}</span>
+      <span><b>${t}</b><br><span class="muted small">${s}</span></span></div>`).join("")}
+    <p class="reassure">Set up once. Forwarding is the only step that needs your phone — we walk you through it.</p>`;}};
+
+SCREENS.forwarding={title:"Phone forwarding",render(){return `
+  <div class="card" style="background:var(--calm-soft);border:none"><span class="pill calm">✓ Working</span>
+    <p style="margin:.5rem 0 0">Mom's calls reach the twin, and it can hand the call to you anytime.</p></div>
+  <div class="section-label">How it's set up</div>
+  <div class="card"><label class="lbl">Mom's phone company</label>
+    <select class="field"><option>Verizon</option><option>AT&T</option><option>T-Mobile</option></select>
+    <label class="lbl">Turn it on (tap to dial on Mom's phone)</label>
+    <button class="btn ghost" onclick="say('Opening the dialer with *72…')">📞 Dial *72 1 218 630 8231</button>
+    <button class="btn primary" style="margin-top:.6rem" onclick="say('Calling to check it works…')">Test it now</button></div>
+  <div class="btnrow"><button class="btn ghost" onclick="say('Paused — Mom’s calls ring her normally')">Pause forwarding</button>
+    <button class="btn ghost" onclick="say('We’ll call you to help')">Call me for help</button></div>
+  <p class="reassure">In a two-party-consent state? You can use <b>“Fill a gap”</b> instead of forwarding.</p>`;}};
+
+SCREENS.consent={title:"What you've allowed",render(){return `<p class="intro">You're in control. Change any piece — we tell you exactly what happens.</p>
+  ${CONSENT.map((c,i)=>`<div class="card"><div class="toggle"><span><b>${c.t}</b><br><span class="muted small">${c.sub}</span></span>
+     <button class="switch" role="switch" aria-checked="${c.on}" aria-label="${c.t}" onclick="this.setAttribute('aria-checked',this.getAttribute('aria-checked')==='true'?'false':'true');say('${c.cons.replace(/'/g,'’')}')"></button></div></div>`).join("")}
+  <p class="reassure">Big changes go through your care coordinator — you're never alone with a hard decision.</p>`;}};
+
+SCREENS.alerts={title:"Alerts",render(){return `<p class="intro">How you're told when something needs you.</p>
+  <div class="section-label">How sensitive should alerts be?</div>
+  <div class="card">${PRESETS.map((p,i)=>`<button class="chip" aria-pressed="${i===1}" onclick="say('Set to ${p}')">${p}</button>`).join("")}</div>
+  <div class="section-label">Who's told, in order</div>
+  ${CONTACTS.map(c=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><span><b>${c.name}</b><br><span class="muted small">${c.role}</span></span>
+     <button class="btn ghost" style="width:auto;min-height:42px;padding:0 .9rem" onclick="say('Sent a test alert to ${c.name}')">Test</button></div>`).join("")}
+  <button class="btn ghost" onclick="say('Add a standby contact…')">＋ Add someone</button>
+  <div class="section-label">How & when</div>
+  <div class="card"><div class="toggle"><span>Text me</span><button class="switch" role="switch" aria-checked="true" aria-label="Text me"></button></div>
+    <div class="toggle"><span>Call me for urgent</span><button class="switch" role="switch" aria-checked="true" aria-label="Call me"></button></div>
+    <div class="toggle"><span>Quiet hours (9pm–8am)</span><button class="switch" role="switch" aria-checked="false" aria-label="Quiet hours"></button></div></div>
+  <p class="reassure">Emergencies always reach everyone right away — that can't be turned down. 🛟</p>`;}};
+
+SCREENS.promises={title:"Promises",render(){return `<p class="intro">Things the twin should bring up until they're done — so the twin keeps your word.</p>
+  ${PROMISES.map(p=>`<div class="card"><b>${p.text}</b><br><span class="muted small">Mentions it ${p.when}</span></div>`).join("")}
+  <button class="btn primary" onclick="say('Add a promise…')">＋ Add a promise</button>`;}};
+SCREENS.routines={title:"Routines",render(){return `<p class="intro">Mom's daily rhythm, so the twin can ask about her day like you would.</p>
+  ${ROUTINES.map(r=>`<div class="card"><b>${r.t}</b><br><span class="muted">${r.d}</span></div>`).join("")}
+  <button class="btn primary" onclick="say('Add a routine…')">＋ Add a routine</button>`;}};
+
+SCREENS.switch={title:"Switch patient",render(){return `<p class="intro">You look after more than one person. Only the one you pick is shown.</p>
+  ${PERSONAS.map(p=>`<button class="row" onclick="say('Now looking after ${p.label}');root('home')">
+    <span class="lead">${p.active?'✓':'•'}</span><span><span class="rtitle">${p.label}</span>${p.active?'<br><span class="rsub">showing now</span>':''}</span><span class="chev">›</span></button>`).join("")}`;}};
+
+SCREENS.account={title:"Your details",render(){return `<div class="card"><label class="lbl">Your name</label><input class="field" value="Ivan">
+    <label class="lbl">How the twin reaches you</label><input class="field" value="+1 (218) 630-8231">
+    <button class="btn primary" onclick="say('Saved')">Save</button></div>
+  <p class="muted small" style="text-align:center">Signed in as ivan@proxi.care · <a href="#" onclick="say('Signed out (demo)');return false" style="color:var(--accent-ink)">log out</a></p>`;}};
+
+SCREENS.leave={title:"Leave the program",render(){return `<p class="intro">We'll walk you through it gently — nothing happens without your say-so.</p>
+  <div class="stepbar"><i class="on"></i><i></i><i></i></div>
+  <div class="card"><b>1 · Stop the calls</b><br><span class="muted">We turn off forwarding and call Mom's number to make sure the twin no longer answers.</span></div>
+  <div class="card"><b>2 · See what's deleted</b><br><span class="muted">The cloned voice, recordings, transcripts, and memory book — all erased for good.</span></div>
+  <div class="card"><b>3 · What the law keeps</b><br><span class="muted">A small audit record (required for 6 years) and any 911 records. We tell you exactly what and why.</span></div>
+  <button class="btn danger" onclick="say('A coordinator will call to confirm — nothing is deleted yet')">Start leaving</button>
+  <p class="reassure">You can pause or change your mind at any step. 💛</p>`;}};
+
+// voice-memo FAB (POR.7) — record → extract → confirm
+function openMemo(){const s=document.createElement('div');s.className='sheet';s.id='sheet';
+  s.innerHTML=`<div class="inner"><div style="display:flex;justify-content:space-between;align-items:center">
+    <h3 style="font-family:var(--serif);margin:0">Add a memory</h3><button class="back" onclick="closeSheet()" aria-label="Close">✕</button></div>
+    <p class="muted">Just talk — say anything about Mom. We'll turn it into memories for you to confirm.</p>
+    <button class="mic" onclick="say('Listening…');this.nextElementSibling.style.display='block'">🎙️</button>
+    <div style="display:none">
+      <div class="card"><b>I heard:</b> “Mom loves Ella Fitzgerald, plays her every evening.”</div>
+      <div class="card"><span class="pill soft">Likes & comforts</span><p style="margin:.4rem 0 0">Mom enjoys Ella Fitzgerald in the evenings.</p></div>
+      <button class="btn calm" onclick="say('Added — the twin will use it');closeSheet()">✓ Add this</button>
+      <button class="btn ghost" style="margin-top:.5rem" onclick="closeSheet()">Not quite — try again</button></div>
+    <button class="btn ghost" style="margin-top:.6rem" onclick="say('Type instead…')">Type it instead</button></div>`;
+  document.querySelector('.phone').appendChild(s);}
+function closeSheet(){const s=document.getElementById('sheet');if(s)s.remove();}
+
+function say(msg){let t=document.getElementById('toast');
   if(!t){t=document.createElement('div');t.id='toast';
-    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#2b2722;color:#fff;padding:.7rem 1.1rem;border-radius:999px;font-size:.92rem;z-index:50;max-width:88%;text-align:center';
+    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#2b2722;color:#fff;padding:.7rem 1.1rem;border-radius:999px;font-size:.92rem;z-index:60;max-width:88%;text-align:center';
     document.body.appendChild(t);}
-  t.textContent=msg; t.style.opacity=1;
-  clearTimeout(t._h); t._h=setTimeout(()=>t.style.opacity=0,2600);
-}
+  t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2800);}
 
 root('home');
 </script>
